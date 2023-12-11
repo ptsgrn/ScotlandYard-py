@@ -1,8 +1,6 @@
-'''Program to calculate possible positions of Mr. X in the game Scotland Yard.
-'''
-
 import networkx as nx
 from collections import deque
+
 
 # Prepare an empty graph with all stations
 with open('nodes.txt') as nodefile:
@@ -10,18 +8,21 @@ with open('nodes.txt') as nodefile:
     for (node, line) in enumerate(nodefile):
         if line.rstrip('\r\n'):
             (x, y) = map(int, line.split())
-            city.add_node(node+1, {'x':x, 'y':y})
+            city.add_node(node+1)
+            city.nodes[node+1]['x'] = x
+            city.nodes[node+1]['y'] = y
 
 # Provide the dictionary to use with networkx's draw methods
 pos = dict()
-for (node, position) in city.node.items():
+for (node, position) in city.nodes.items():
     pos[node] = (position['x'], position['y'])
 
-gs = {
+gf = {
     'taxi': 'taxi.txt',
     'bus': 'bus.txt',
     'subway': 'subway.txt'
-    }
+}
+
 
 def graph_from_adj_file(graph_filename):
     '''Return the graph constructed from the edgelist in the given file.
@@ -38,13 +39,17 @@ def graph_from_adj_file(graph_filename):
                     graph.add_edge(startnode, int(end))
     return graph
 
-for (transport_method, graph_filename) in gs.items():
+
+gs = dict()
+
+for (transport_method, graph_filename) in gf.items():
     gs[transport_method] = graph_from_adj_file(graph_filename)
 
 # The police can travel by taxi, bus and subway.
 gs['police'] = nx.compose_all(list(gs.values()))
 # Mr. X has the ability to use the ferry.
 gs['black'] = nx.compose(gs['police'], graph_from_adj_file('ferry.txt'))
+
 
 def hop(nodes, ticket):
     '''Given a node considered to be a possible starting position (or a list
@@ -53,7 +58,8 @@ def hop(nodes, ticket):
 
     ticket should be 'taxi', 'bus', 'subway' or 'black'.
     '''
-    return sorted(set(map( lambda x: x[1], gs[ticket].edges(nodes))))
+    return sorted(set(map(lambda x: x[1], gs[ticket].edges(nodes))))
+
 
 def trace(startnode, ticket_list):
     '''Given a node considered to be a possible starting position (or a list
@@ -67,6 +73,7 @@ def trace(startnode, ticket_list):
     while ticket_list:
         nodes = hop(nodes, ticket_list.popleft())
     return sorted(nodes)
+
 
 if __name__ == '__main__':
     import sys
