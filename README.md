@@ -4,6 +4,12 @@ This program is (or will be) a Scotland Yard helper that calculates the possible
 
 networkx is required.
 
+## Installation:
+Clone the repository and install dependencies:
+
+    git clone https://github.com/ptsgrn/ScotlandYard-py.git
+    pip install -r requirements.txt
+
 ## Usage:
 
 At the command promt enter
