@@ -1,4 +1,7 @@
-# Scotland Yard Helper in Python
+# Scotland Yard Helper in Python (Updated)
+<a target="_blank" href="https://colab.research.google.com/github/ptsgrn/ScotlandYard-py/blob/master/colab.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 
 This program is (or will be) a Scotland Yard helper that calculates the possible positions of Mr. X given a starting position and a list of tickets.
 
